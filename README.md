@@ -367,70 +367,77 @@ View взаимодействуют с Presenter исключительно че
 ## 6. The Presenter Layer
 Presenter — это "P" в MVP, который действует как посредник между Model и View. Он содержит логику представления, которая обрабатывает взаимодействия с пользователем, получает данные из Model, обрабатывает их и соответствующим образом и обновляет View. 
 
-IBasePresenter Interface
+**IBasePresenter Interface**  
 Определяет общий метод(контракт) для всех Presenter.
+```
 interface IBasePresenter {
     init(): void;    
     destroy(): void; 
 }
-
-**BasePresenter Abstract Class**
-Назначение: Класс BasePresenter предоставляет общую основу для всех конкретных Presenter, обрабатывая общие задачи (подписка на Model и связывание View-Model).
+```
+**BasePresenter Abstract Class**  
+Назначение: Класс BasePresenter предоставляет общую основу для всех конкретных Presenter, обрабатывая общие задачи (подписка на Model и связывание View-Model).  
 Зона ответственности:
 * Хранит ссылки на Model и связанные с ней View (через их интерфейсы).
-* Управляет подписками на события Model.
+* Управляет подписками на события Model.  
 Хранит в себе:
 * protected model: StoreModel; 
 * protected view: IBaseView; 
-* protected subscriptions: Array<{ event: string, handler: Function }>;
+* protected subscriptions: Array<{ event: string, handler: Function }>;  
 Основные методы:
 * constructor(model: StoreModel, view: IBaseView)
 * abstract init(): void;
 * destroy(): void;
 * protected subscribeToModel(eventName: string, handler: Function): void: 
 
-Основные реализации Presenter
-Каждый Presenter будет расширять BasePresenter и реализовывать свою уникальную логику представления для данной функциональной области.
+**Основные реализации Presenter**  
+Каждый Presenter будет расширять BasePresenter и реализовывать свою уникальную логику представления для данной функциональной области.  
 
-**AppPresenter**
-Назначение: AppPresenter обрабатывает начальную настройку, загрузку данных и управляет общим потоком приложения и переходами между представлениями.
+**AppPresenter**  
+Назначение: AppPresenter обрабатывает начальную настройку, загрузку данных и управляет общим потоком приложения и переходами между представлениями.  
 Зона ответственности:
 * Инициализирует StoreModel и все основные Presenter.
 * Загружает начальные данные о товарах.
-* Управляет отображением основных разделов приложения и координирует открытие модальных окон.
-Основные методы: init(), showHomePage(), showProductDetail(productId: string), showCart(), startCheckout().
+* Управляет отображением основных разделов приложения и координирует открытие модальных окон  
 
-**ProductCatalogPresenter**
-Назначение: ProductCatalogPresenter управляет логикой представления для главной страницы, отображает каталог товаров.
+Основные методы:  
+init(), showHomePage(), showProductDetail(productId: string), showCart(), startCheckout().  
+
+**ProductCatalogPresenter**  
+Назначение: ProductCatalogPresenter управляет логикой представления для главной страницы, отображает каталог товаров.  
 Зона ответственности:
 * Слушает событие productsUpdated от Model для рендеринга каталога товаров.
 * Обрабатывает клики по карточкам товаров и значку корзины.
-* Подписывается на cartUpdated для обновления состояний кнопок "Оформить".
-Основные методы: init(), handleProductsUpdated(), handleCartUpdated(), onProductCardClicked(), onCartIconClicked().
+* Подписывается на cartUpdated для обновления состояний кнопок "Оформить".  
+Основные методы:  
+init(), handleProductsUpdated(), handleCartUpdated(), onProductCardClicked(), onCartIconClicked().  
 
-**ProductDetailPresenter**
-Назначение: ProductDetailPresenter управляет логикой представления для модального окна с подробной информацией о товаре.
+**ProductDetailPresenter**  
+Назначение: ProductDetailPresenter управляет логикой представления для модального окна с подробной информацией о товаре.  
 Зона ответственности:
 * Извлекает подробную информацию о товаре из Model, отображает ее.
 * Обрабатывает клики по кнопкам "Оформить" и "Удалить".
-* Подписывается на cartUpdated для обновления состояния своей кнопки "Оформить"/"Удалить".
-Основные методы: init(), showProductDetails(), onBuyClicked(), onRemoveClicked(), handleCartUpdated(), onModalClosed().
+* Подписывается на cartUpdated для обновления состояния своей кнопки "Оформить"/"Удалить"  
+Основные методы:  
+init(), showProductDetails(), onBuyClicked(), onRemoveClicked(), handleCartUpdated(), onModalClosed().  
 
-**CartPresenter**
-Назначение: CartPresenter управляет логикой представления для корзины для покупок.
+**CartPresenter**  
+Назначение: CartPresenter управляет логикой представления для корзины для покупок.  
 Зона ответственности:
 * Слушает cartUpdated для отображения содержимого.
-* Обрабатывает клики "Удалить" для отдельных товаров и клик по кнопке "Оформить".
-Основные методы: init(), showCart(), handleCartUpdated(), onRemoveItemClicked(), onCheckoutClicked(), onModalClosed().
+* Обрабатывает клики "Удалить" для отдельных товаров и клик по кнопке "Оформить".  
+Основные методы:  
+init(), showCart(), handleCartUpdated(), onRemoveItemClicked(), onCheckoutClicked(), onModalClosed().
 
-**CheckoutPresenter**
-Назначение: CheckoutPresenter управляет многошаговым процессом оформления заказа, координируя взаимодействие между Model и представлениями оформления заказа.
+**CheckoutPresenter**  
+Назначение: CheckoutPresenter управляет многошаговым процессом оформления заказа, координируя взаимодействие между Model и представлениями оформления заказа.  
 Зона ответственности:
 * Управляет состоянием шагов оформления заказа.
 * Обновляет Model данными, введенными пользователем, и обрабатывает обратную связь по валидации.
 * Включает/отключает кнопки "Далее" и "Оплатить".
-* Обрабатывает размещение заказа и отображает сообщения об успехе/ошибке.
-Ключевые методы: init(), startCheckout(), handlePaymentMethodSelected(), handleDeliveryAddressInput(), handleNextStepClick(), handleBuyerContactInput(), handlePayButtonClick(), handleOrderDetailsUpdated(), handleOrderPlaced().
+* Обрабатывает размещение заказа и отображает сообщения об успехе/ошибке.  
+Основные методы:  
+init(), startCheckout(), handlePaymentMethodSelected(), handleDeliveryAddressInput(), handleNextStepClick(), handleBuyerContactInput(), handlePayButtonClick(), handleOrderDetailsUpdated(), handleOrderPlaced().
 
 ## 7. Описание системы событий 
 **Основной механизм событий в StoreModel**
