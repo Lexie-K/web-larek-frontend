@@ -102,17 +102,18 @@ yarn build
 
 Основные интерфейсы данных:
 
-**IProduct**
+**IProduct**  
 Назначение: Представляет собой один товар, доступный в каталоге Web-ларёк. Этот интерфейс инкапсулирует все необходимые детали для отображения и управления товаром.
-Хранит в себе:
+Хранит в себе:  
 * id: string - Id товара;
 * description: string - Подробное описание;
 * image: string - URL-адрес изображения товара;
 * title: string - Название товара;
 * category: string - Категория товара;
 * price: number - Цена товара;
+```
+interface IProduct {  
 
-interface IProduct {
     id: string;
     description: string;
     image: string;
@@ -120,49 +121,52 @@ interface IProduct {
     category: string;
     price: number;
 }
-
-**ICartItem**
-Назначение: Представляет собой товар, добавленный в корзину пользователя.
-Хранит в себе:
+```
+**ICartItem**  
+Назначение: Представляет собой товар, добавленный в корзину пользователя.  
+Хранит в себе:  
 * id: string - Id  IProduct;
 * title: string - Название товара для UI;
 * price: number - Цена товара для UI;
 * quantity: number - (Опционально) Количество единиц товара для UI.
+```
+interface ICartItem {  
 
-interface ICartItem {
     id: string;
     title: string;
     price: number;
     quantity?: number;  
 }
-
-**IDeliveryAddress**
-Назначение:  Хранит данные, необходимые для отправки заказа.
+```
+**IDeliveryAddress**  
+Назначение:  Хранит данные, необходимые для отправки заказа.  
 Хранит в себе:
 * address: string - Адрес пользователя для отправки заказа;
+```
+interface IDeliveryAddress {  
 
-interface IDeliveryAddress {
     address: string;
 }
-
-**IPaymentMethod**
-Назначение: Определяет доступные варианты оплаты.
-Хранит в себе: Определенное строковое значение, представляющее способ оплаты.
+```
+**IPaymentMethod**  
+Назначение: Определяет доступные варианты оплаты.  
+Хранит в себе: Определенное строковое значение, представляющее способ оплаты.  
+```
 type "payment" = “Онлайн” | “При получении“;
-
-**IBuyerContact**
-Назначение: Хранит контактные данные пользователя.
-Хранит в себе:
+```
+**IBuyerContact**  
+Назначение: Хранит контактные данные пользователя.  
+Хранит в себе:  
 * email: string - email пользователя;
 * phone: string - контактный номер пользователя.
-
+```
 interface IBuyerContact {
     email: string;
     phone: string;
 }
-
-**IOrder**
-Назначение: Представляет собой окончательный заказ клиента.
+```
+**IOrder**  
+Назначение: Представляет собой окончательный заказ клиента.  
 Хранит в себе:
 * payment: IPaymentMethod;
 * id: string - id пользователя;
@@ -170,7 +174,7 @@ interface IBuyerContact {
 * items: ICartItem[];
 * address: IDeliveryAddress;
 * total: number
-
+```
 interface IOrder {
     id: string,
     payment: IPaymentMethod,
@@ -179,7 +183,7 @@ interface IOrder {
     total: number,
     items: ICartItem[]
 }
-
+```
 
 ## 3. Api
 В этом разделе описывается универсальный API-клиент, используемый для выполнения HTTP-запросов к бэкэнду.
