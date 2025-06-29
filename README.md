@@ -42,27 +42,27 @@ yarn build
 ```
 # Документация
 **Содержание:**<br>
-**1.Введение**<br>
-**2. Интерфэйсы данных**
+1. Введение
+2. Интерфэйсы данных
 * IProduct
 * ICartItem
 * IDeliveryAddress
 * IPaymentMethod
 * IBuyerContact
 * IOrder
-<br>
-**3. Api**
+
+3. Api
 * ApiListResponse type
 * ApiPostMethods
 * IApi интерфэйс
 * Api class
-<br>
-**4. Модели данных (The Model Layer)**
+
+4. Модели данных (The Model Layer)
 * Назначение и зона ответственности
 * Основные методы
 * Событийный механизм 
-<br> 
-**5. Компоненты представлений (The View Layer)**
+
+5. Компоненты представлений (The View Layer)
 * Основные принципы проектирования компонентов представлений
 * Интерфейс IBaseView
 * Абстрактный класс BaseView
@@ -73,8 +73,8 @@ yarn build
 * IMessageModalView и MessageModalView
 * Представления оформления заказа (ICheckoutStep1View, ICheckoutStep2View)
 * Взаимодействие с presenter
-<br>
-**6. The Presenter Layer**
+
+6. The Presenter Layer
 * Основные принципы проектирования Presenter
 * Интерфейс IBasePresenter
 * Абстрактный класс BasePresenter
@@ -85,14 +85,14 @@ yarn build
 * CartPresenter
 * CheckoutPresenter
 * Поток взаимодействия (модель <-> презентатор <-> представление)
-<br>
-**7. Описание системы событий** 
+
+7. Описание системы событий
 * Основной механизм событий в StoreModel
 * productsUpdated
 * cartUpdated
 * orderDetailsUpdated
 * orderPlaced
-<br>
+
 
  ## 1. Введение
  Приложение Web-ларёк — это онлайн-магазин, разработанный для веб-разработчиков, предоставляющий каталог товаров, корзину для покупок и систему оформления заказов. Архитектура веб-приложения основывается на Model-View-Presenter(MVP)-паттерне и c соблюдением принципов SOLID.
