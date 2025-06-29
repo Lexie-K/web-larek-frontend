@@ -41,25 +41,25 @@ npm run build
 yarn build
 ```
 # Документация
-Содержание:
-1. Введение
-2. Интерфэйсы данных
+**Содержание:**
+**1. Введение**
+**2. Интерфэйсы данных**
 * IProduct
 * ICartItem
 * IDeliveryAddress
 * IPaymentMethod
 * IBuyerContact
 * IOrder
-3. Api
+**3. Api**
 * ApiListResponse type
 * ApiPostMethods
 * IApi интерфэйс
 * Api class
-4. Модели данных (The Model Layer)
+**4. Модели данных (The Model Layer)**
 * Назначение и зона ответственности
 * Основные методы
 * Событийный механизм  
-5. Компоненты представлений (The View Layer)
+**5. Компоненты представлений (The View Layer)**
 * Основные принципы проектирования компонентов представлений
 * Интерфейс IBaseView
 * Абстрактный класс BaseView
@@ -70,7 +70,7 @@ yarn build
 * IMessageModalView и MessageModalView
 * Представления оформления заказа (ICheckoutStep1View, ICheckoutStep2View)
 * Взаимодействие с presenter
-6. The Presenter Layer
+**6. The Presenter Layer**
 * Основные принципы проектирования Presenter
 * Интерфейс IBasePresenter
 * Абстрактный класс BasePresenter
@@ -81,7 +81,7 @@ yarn build
 * CartPresenter
 * CheckoutPresenter
 * Поток взаимодействия (модель <-> презентатор <-> представление)
-7. Описание системы событий 
+**7. Описание системы событий** 
 * Основной механизм событий в StoreModel
 * productsUpdated
 * cartUpdated
