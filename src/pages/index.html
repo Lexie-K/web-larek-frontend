@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="no-js" lang="ru">
 <head>
 	<meta charset="utf-8">
@@ -39,7 +39,7 @@
 		</div>
 	</div>
 
-	<div class="modal modal_active">
+	<div class="modal">
 		<div class="modal__container">
 			<button class="modal__close" aria-label="закрыть"></button>
 			<div class="modal__content">
@@ -128,11 +128,11 @@
 					<div class="order">
 						<label class="order__field">
 							<span class="form__label modal__title">Email</span>
-							<input class="form__input" type="text" placeholder="Введите Email" />
+							<input class="form__input" type="email" placeholder="Введите Email" />
 						</label>
 						<label class="order__field">
 							<span class="form__label modal__title">Телефон</span>
-							<input class="form__input" type="text" placeholder="+7 (" />
+							<input class="form__input" type="tel" placeholder="+7(" />
 						</label>
 					</div>
 					<div class="modal__actions">
@@ -235,11 +235,13 @@
 			<div class="order">
 				<label class="order__field">
 					<span class="form__label modal__title">Email</span>
-					<input name="email" class="form__input" type="text" placeholder="Введите Email" />
+					<input name="email" class="form__input" type="email" placeholder="Введите Email" />
+					<span class="form__errors" name="email"></span>
 				</label>
 				<label class="order__field">
 					<span class="form__label modal__title">Телефон</span>
-					<input name="phone" class="form__input" type="text" placeholder="+7 (" />
+					<input name="phone" class="form__input" type="tel" placeholder="+7 (" />
+					<span class="form__errors" name="phone"></span>
 				</label>
 			</div>
 			<div class="modal__actions">
