@@ -38,8 +38,8 @@ export class CartView extends BaseView<void> implements ICartView {
 		this._list.innerHTML = '';
 
 		if (items.length === 0) {
-			this._list.textContent = 'Корзина пуста';
-			this._checkoutButton.disabled = true;
+			this.setText(this._list, 'Корзина пуста');
+			this.setDisabled(this._checkoutButton, true);
 		} else {
 			items.forEach((item, index) => {
 				const itemElement = cloneTemplate<HTMLElement>(this._cartItemTemplate);
@@ -51,10 +51,10 @@ export class CartView extends BaseView<void> implements ICartView {
 				cartItem.setIndex(index + 1);
 				this._list.append(cartItem.render(item));
 			});
-			this._checkoutButton.disabled = false;
+			this.setDisabled(this._checkoutButton, false);
 		}
 
-		this._totalPrice.textContent = `${total} синапсов`;
+		this.setText(this._totalPrice, `${total} синапсов`);
 	}
 
 	bindEvents(): void {

@@ -1,14 +1,19 @@
-import { BaseView } from './base/baseView';
 import { ICheckoutStep2View } from '../types';
 import { ensureElement } from '../utils/utils';
+import { BaseForm, TFormInputValues } from './formView';
+
+interface ICheckoutStep2FormData extends TFormInputValues {
+	email: string;
+	phone: string;
+}
 
 export class CheckoutStep2View
-	extends BaseView<void>
+	extends BaseForm<ICheckoutStep2FormData>
 	implements ICheckoutStep2View
 {
 	protected _emailInput: HTMLInputElement;
 	protected _phoneInput: HTMLInputElement;
-	protected _submitButton: HTMLButtonElement;
+
 	protected _emailError: HTMLElement;
 	protected _phoneError: HTMLElement;
 
@@ -25,10 +30,6 @@ export class CheckoutStep2View
 		);
 		this._phoneInput = ensureElement<HTMLInputElement>(
 			'.form__input[name="phone"]',
-			this.container
-		);
-		this._submitButton = ensureElement<HTMLButtonElement>(
-			'.button[type="submit"]',
 			this.container
 		);
 		this._emailError = ensureElement<HTMLElement>(
@@ -60,17 +61,13 @@ export class CheckoutStep2View
 	}
 
 	showEmailError(message: string): void {
-		this._emailError.textContent = message;
+		this.setText(this._emailError, message);
 		this.toggleClass(this._emailError, 'form__error_active', !!message);
 	}
 
 	showPhoneError(message: string): void {
-		this._phoneError.textContent = message;
+		this.setText(this._phoneError, message);
 		this.toggleClass(this._phoneError, 'form__error_active', !!message);
-	}
-
-	setSubmitButtonEnabled(enabled: boolean): void {
-		this._submitButton.disabled = !enabled;
 	}
 
 	bindEvents(): void {
@@ -83,11 +80,10 @@ export class CheckoutStep2View
 			const inputElement = e.target as HTMLInputElement;
 			this._onPhoneInputHandler?.(inputElement.value);
 		});
+	}
 
-		this.addEventListener(this._submitButton, 'click', (e: Event) => {
-			e.preventDefault();
-			this._onSubmitClickHandler?.();
-		});
+	onSubmit(): void {
+		this._onSubmitClickHandler?.();
 	}
 
 	setEmail(email: string): void {

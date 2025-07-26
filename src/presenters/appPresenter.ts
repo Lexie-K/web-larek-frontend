@@ -2,7 +2,7 @@ import { Api } from '../components/base/api';
 import { EventEmitter } from '../components/base/events';
 import { ProductCatalogPresenter } from './productCatalogPresenter';
 import { ProductCatalog } from '../components/productCatalogView';
-import { IProduct, IStoreModel } from '../types';
+import { IProduct, IStoreModel, IOrder } from '../types';
 import { StoreModel } from '../model/storeModel';
 import { ProductDetailModal } from '../components/productDetailModalView';
 import { ProductDetailPresenter } from './productDetailPresenter';
@@ -14,6 +14,7 @@ import { CheckoutStep1View } from '../components/checkoutStep1View';
 import { CheckoutStep2View } from '../components/checkoutStep2View';
 import { CheckoutPresenter } from './checkoutPresenter';
 import { MessageModalView } from '../components/messageModalView';
+import { PageView } from '../components/pageView';
 
 export class AppPresenter {
 	protected readonly api: Api;
@@ -30,6 +31,7 @@ export class AppPresenter {
 	protected readonly checkoutStep2View: CheckoutStep2View;
 	protected readonly messageModalView: MessageModalView;
 	protected readonly checkoutPresenter: CheckoutPresenter;
+	protected readonly pageView: PageView;
 
 	constructor(
 		api: Api,
@@ -47,7 +49,7 @@ export class AppPresenter {
 		this.api = api;
 		this.events = events;
 
-		this.model = new StoreModel(this.events, this.api);
+		this.model = new StoreModel(this.events);
 
 		this.productCatalogView = new ProductCatalog(
 			galleryElement,
@@ -60,6 +62,7 @@ export class AppPresenter {
 		);
 
 		this.appModal = new Modal(modalContainer, this.events);
+		this.pageView = new PageView(document.body);
 
 		this.productDetailModalView = new ProductDetailModal(
 			cloneTemplate(productPreviewTemplate)
@@ -117,28 +120,28 @@ export class AppPresenter {
 		});
 
 		this.events.on('modal:open', () => {
-			document.body.classList.add('page__locked');
+			this.pageView.setLocked(true);
 		});
 
 		this.events.on('modal:close', () => {
-			document.body.classList.remove('page__locked');
+			this.pageView.setLocked(false);
 		});
 
 		this.events.on('order:start', () => {
 			//
 		});
 
-		this.events.on('app:returnHome', () => {
+		this.events.on('order:readyForPlacement', (orderData: IOrder) => {
 			this.api
-				.get('product')
-				.then((data: { items: IProduct[] }) => {
-					this.model.loadProducts(data.items);
+				.post('order', orderData)
+				.then((response: IOrder) => {
+					this.model.confirmOrderPlacement(response);
 				})
-				.catch((err) => {
-					console.error('Error reloading products after ordering:', err);
+				.catch((error) => {
+					console.error('AppPresenter: Failed to place order via API:', error);
+					this.events.emit('order:error', error);
 				});
-
-			this.appModal.close();
 		});
+		this.appModal.close();
 	}
 }

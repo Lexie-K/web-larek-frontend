@@ -31,13 +31,13 @@ export class CartItem extends BaseView<ICartItem> {
 	}
 
 	render(data: ICartItem): HTMLElement {
-		this._title.textContent = data.title;
-		this._price.textContent = `${data.price} синапсов`;
+		this.setText(this._title, data.title);
+		this.setText(this._price, `${data.price} синапсов`);
 		return this.container;
 	}
 
 	setIndex(index: number): void {
-		this._index.textContent = String(index);
+		this.setText(this._index, index);
 	}
 
 	bindEvents(): void {

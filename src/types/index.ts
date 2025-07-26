@@ -110,9 +110,13 @@ export interface IStoreModel extends IEvents {
 	setPaymentMethod(method: IPaymentMethod): void;
 	setDeliveryAddress(address: IDeliveryAddress): boolean;
 	setBuyerContact(contact: IBuyerContact): boolean;
-	placeOrder(): Promise<IOrder>;
+
+	prepareOrderForPlacement(): IOrder;
+	confirmOrderPlacement(confirmedOrder: IOrder): void;
+
 	resetOrder(): void;
 }
+
 export interface IBasePresenter {
 	init(): void;
 	destroy(): void;

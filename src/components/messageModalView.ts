@@ -45,11 +45,11 @@ export class MessageModalView
 	}
 
 	showMessage(message: string): void {
-		this.descriptionElement.textContent = message;
+		this.setText(this.descriptionElement, message);
 	}
 
 	onClose(handler: () => void): void {
-		this.actionButton.addEventListener('click', handler);
+		this.addEventListener(this.actionButton, 'click', handler);
 	}
 
 	bindEvents(): void {

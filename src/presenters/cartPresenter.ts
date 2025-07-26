@@ -50,7 +50,7 @@ export class CartPresenter {
 		this.model.removeFromCart(productId);
 	}
 
-	private onCheckoutClicked(): void {	
+	private onCheckoutClicked(): void {
 		this.events.emit('order:start');
 	}
 }

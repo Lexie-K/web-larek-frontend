@@ -50,4 +50,20 @@ export abstract class BaseView<T = void> implements IBaseView<T> {
 	): void {
 		element.classList.toggle(className, force);
 	}
+
+	protected setText(element: HTMLElement, value: string | number | null): void {
+		if (element) {
+			element.textContent = String(value);
+		}
+	}
+
+	protected setDisabled(element: HTMLElement, state: boolean): void {
+		if (
+			element instanceof HTMLButtonElement ||
+			element instanceof HTMLInputElement ||
+			element instanceof HTMLTextAreaElement
+		) {
+			element.disabled = state;
+		}
+	}
 }

@@ -1,5 +1,4 @@
 import { EventEmitter } from '../components/base/events';
-import { Api } from '../components/base/api';
 import {
 	IProduct,
 	IOrder,
@@ -14,11 +13,9 @@ export class StoreModel implements IStoreModel {
 	protected _cartItems: IProduct[];
 	protected _currentOrder: IOrder;
 	protected readonly events: EventEmitter;
-	protected readonly api: Api;
 
-	constructor(events: EventEmitter, api: Api) {
+	constructor(events: EventEmitter) {
 		this.events = events;
-		this.api = api;
 		this._products = [];
 		this._cartItems = [];
 		this._currentOrder = {
@@ -129,7 +126,7 @@ export class StoreModel implements IStoreModel {
 		return true;
 	}
 
-	async placeOrder(): Promise<IOrder> {
+	prepareOrderForPlacement(): IOrder {
 		this._currentOrder.items = this._cartItems.map((item) => item.id);
 		this._currentOrder.total = this.getCartTotal();
 
@@ -144,7 +141,7 @@ export class StoreModel implements IStoreModel {
 			const errorMessage =
 				'Order is incomplete. Please ensure all fields are filled and items are in cart.';
 			console.error(
-				'Model: Validation failed before placing order:',
+				'Model: Validation failed before preparing order:',
 				errorMessage,
 				this._currentOrder
 			);
@@ -152,20 +149,14 @@ export class StoreModel implements IStoreModel {
 			throw new Error(errorMessage);
 		}
 
-		try {
-			const response = await this.api.post('order', this._currentOrder);
-			const confirmedOrder: IOrder = response as IOrder;
+		this.emit('order:readyForPlacement', this._currentOrder);
+		return this._currentOrder;
+	}
 
-			this.clearCart();
-			this.resetOrder();
-			this.events.emit('orderPlaced', confirmedOrder);
-
-			return confirmedOrder;
-		} catch (error) {
-			console.error('Model: Failed to place order via API:', error);
-			this.events.emit('order:error', error);
-			throw error;
-		}
+	confirmOrderPlacement(confirmedOrder: IOrder): void {
+		this.clearCart();
+		this.resetOrder();
+		this.events.emit('orderPlaced', confirmedOrder);
 	}
 
 	resetOrder(): void {

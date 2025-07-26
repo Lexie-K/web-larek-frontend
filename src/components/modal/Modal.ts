@@ -22,6 +22,16 @@ export class Modal extends BaseView<IModalData> {
 		this.setEventListeners();
 	}
 
+	private _toggleModal(state = true) {
+		this.toggleClass(this.container, 'modal_active', state);
+	}
+
+	private _handleEscape = (evt: KeyboardEvent) => {
+		if (evt.key === 'Escape') {
+			this.close();
+		}
+	};
+
 	protected setEventListeners(): void {
 		this._closeButton.addEventListener('click', this.close.bind(this));
 
@@ -30,25 +40,25 @@ export class Modal extends BaseView<IModalData> {
 				this.close();
 			}
 		});
-
-		document.addEventListener('keydown', (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && this.isOpen()) {
-				this.close();
-			}
-		});
 	}
 
 	public open(content: HTMLElement): void {
 		this._content.replaceChildren(content);
-		this.toggleClass(this.container, 'modal_active', true);
+		this._toggleModal(true);
+
+		document.addEventListener('keydown', this._handleEscape);
+
 		this.events.emit('modal:open');
 
 		this._closeButton.focus();
 	}
 
 	public close(): void {
-		this.toggleClass(this.container, 'modal_active', false);
+		this._toggleModal(false);
 		this._content.replaceChildren();
+
+		document.removeEventListener('keydown', this._handleEscape);
+
 		this.events.emit('modal:close');
 	}
 
@@ -62,8 +72,6 @@ export class Modal extends BaseView<IModalData> {
 	}
 
 	bindEvents(): void {
-		if (this._closeButton) {
-			this._closeButton.addEventListener('click', () => this.close());
-		}
+		//
 	}
 }

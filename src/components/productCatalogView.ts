@@ -2,12 +2,9 @@ import { IProduct, IProductCatalogView } from '../types';
 import { cloneTemplate, ensureElement } from '../utils/utils';
 import { BaseView } from './base/baseView';
 import { CDN_URL } from '../utils/constants';
+import { BaseCard } from './cardView';
 
-export class ProductCard extends BaseView<IProduct> {
-	protected _title: HTMLElement;
-	protected _image: HTMLImageElement;
-	protected _category: HTMLElement;
-	protected _price: HTMLElement;
+export class ProductCard extends BaseCard<IProduct> {
 	protected _button: HTMLButtonElement | null;
 
 	constructor(
@@ -15,17 +12,6 @@ export class ProductCard extends BaseView<IProduct> {
 		actions?: { onClick?: (event: MouseEvent) => void }
 	) {
 		super(container);
-
-		this._title = ensureElement<HTMLElement>('.card__title', this.container);
-		this._image = ensureElement<HTMLImageElement>(
-			'.card__image',
-			this.container
-		);
-		this._category = ensureElement<HTMLElement>(
-			'.card__category',
-			this.container
-		);
-		this._price = ensureElement<HTMLElement>('.card__price', this.container);
 		this._button = this.container.querySelector('.card__button');
 
 		if (actions?.onClick) {
@@ -34,51 +20,25 @@ export class ProductCard extends BaseView<IProduct> {
 	}
 
 	render(data: IProduct): HTMLElement {
-		this._title.textContent = data.title;
+		this.setText(this._title, data.title);
+
 		this._image.src = `${CDN_URL}${data.image}`;
 		this._image.alt = data.title;
-		this._category.textContent = data.category;
 
-		this._category.classList.remove(
-			'card__category_hard',
-			'card__category_other',
-			'card__category_soft',
-			'card__category_additional',
-			'card__category_button'
-		);
-		switch (data.category) {
-			case 'софт-скил':
-				this._category.classList.add('card__category_soft');
-				break;
-			case 'другое':
-				this._category.classList.add('card__category_other');
-				break;
-			case 'дополнительное':
-				this._category.classList.add('card__category_additional');
-				break;
-			case 'кнопка':
-				this._category.classList.add('card__category_button');
-				break;
-			case 'хард-скил':
-				this._category.classList.add('card__category_hard');
-				break;
-			default:
-				break;
-		}
+		this.setCategory(data.category);
 
-		this._price.textContent =
-			data.price !== null ? `${data.price} синапсов` : 'Бесценно';
+		this.setPrice(data.price);
 
 		if (this._button) {
-			this._button.disabled = data.price === null;
+			this.setDisabled(this._button, data.price === null);
 
 			if (data.price === null) {
-				this._button.textContent = 'Нет в наличии';
+				this.setText(this._button, 'Нет в наличии');
 			} else if (data.isAddedToCart) {
-				this._button.textContent = 'Уже в корзине';
-				this._button.disabled = true;
+				this.setText(this._button, 'Уже в корзине');
+				this.setDisabled(this._button, true);
 			} else {
-				this._button.textContent = 'В корзину';
+				this.setText(this._button, 'В корзину');
 			}
 		}
 
@@ -109,6 +69,7 @@ export class ProductCatalog
 		super(container);
 
 		this._catalogContainer = this.container;
+
 		this._cartButton = ensureElement<HTMLElement>(
 			'.header__basket',
 			document.body
@@ -151,7 +112,7 @@ export class ProductCatalog
 	}
 
 	setCartCounter(count: number): void {
-		this._cartCounter.textContent = String(count);
+		this.setText(this._cartCounter, String(count));
 	}
 
 	bindEvents(): void {

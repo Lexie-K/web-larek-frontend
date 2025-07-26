@@ -79,7 +79,6 @@ export class CheckoutPresenter {
 	}
 
 	private handlePaymentMethodSelect(method: IPaymentMethod): void {
-		
 		this.currentPaymentMethod = method;
 		this.model.setPaymentMethod(method);
 
@@ -174,15 +173,15 @@ export class CheckoutPresenter {
 		this.checkoutStep2View.setSubmitButtonEnabled(isButtonEnabled);
 	}
 
-	private async handleSubmitClick(): Promise<void> {
+	private handleSubmitClick(): void {
 		if (
 			this.validateEmail(this.currentEmail) &&
 			this.validatePhone(this.currentPhone)
 		) {
 			try {
-				await this.model.placeOrder();
+				this.model.prepareOrderForPlacement();
 			} catch (error) {
-				console.error('OrderPresenter: Failed to place order:', error);
+				console.error('CheckoutPresenter: Order preparation failed:', error);
 			}
 		} else {
 			this.updateSubmitButtonState();
